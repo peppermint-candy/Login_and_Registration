@@ -43,7 +43,7 @@
 		<p class="label" >Confirm Password:</p><input type="text" name="c_pw"><br><br>
 		<input style="margin-left: 308px;" type="submit" value="Register">
 		</form>
-		 <p>Alrady have an account, click<a href="{{ url_for('login') }}"> here to log in?</a>
+		 <p>Alrady have an account, click<a href="{{ url_for('test') }}"> here to log in?</a>
 			{% with messages = get_flashed_messages() %}
 				{% if messages %}
 					{% for message in messages %}
@@ -52,22 +52,4 @@
 				{% endif %}
 			{% endwith %}
 	</div>
-	<div>
-		<h2>Already have an account, Login Here!</h2>
-		<form action="/loginX" method="post">
-			<p class="label">Login e-mail: </p><input type="text" name="elogin"><br><br>
-			<p class="label">Password: </p><input type="text" name="Lpw"><br><br>
-			{% with messages = get_flashed_messages() %}
-				{% if messages %}
-					{% for message in messages %}
-					<p>{{message}}</p>
-					{% endfor %}
-				{% endif %}
-			{% endwith %}
-			<input style="margin-left: 325px;" type="submit" value="Login">
-		</form>
-
-		
-	</div>
-</body>
 </html>

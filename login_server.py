@@ -78,28 +78,47 @@ def create(data):
 	mysql.query_db(insert_query, query_data)
 	return redirect('/login')
 
-@app.route('/loginX', methods=['POST'])
+@app.route('/verify', methods=['POST'])
 def logintab():
 	elogin = request.form['elogin']
 	Lpw = request.form['Lpw']
 
-	user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
-	query_data = {'email' : elogin}
-	user = mysql.query_db(user_query, query_data)
-	if bcrypt.check_password_hash(user[0]['password'], Lpw):
-		session['userIn'] = elogin
-		print session['userIn']
-		print "user is in"
-		return redirect('/login')
-
+	if len(request.form['elogin']) < 1:
+		flash("Login e-mail cannot be blank!")
+		error = False
+	elif not EMAIL_REGEX.match(request.form['elogin']):
+		flash("Invalid Email Address!")
+		error = False
 	else:
-		flash("Please try again")
-		return	redirect('/')
+		error = True
+	
+	if error:
+		print "user in verify"
+		return redirect('login')
+	else:
+		flash("try again")
+		return redirect('/test')
+	# user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
+	# query_data = {'email' : elogin}
+	# user = mysql.query_db(user_query, query_data)
+	# if bcrypt.check_password_hash(user[0]['password'], Lpw):
+	# 	session['userIn'] = elogin
+	# 	print session['userIn']
+	# 	print "user is in"
+	# 	return redirect('/login')
 
+	# else:
+	# 	flash("Please try again")
+	# 	return	redirect('/test')
 
+@app.route('/test')
+def test():
+	print "you are in test"
+	return render_template('login_page.html')
 
 @app.route('/login')
 def login():
 	print "Hello"
 	return redirect('/')
 app.run(debug=True)
+
