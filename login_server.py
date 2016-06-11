@@ -78,6 +78,23 @@ def create(data):
 	mysql.query_db(insert_query, query_data)
 	return redirect('/login')
 
+@app.route('/loginX', methods=['POST'])
+def logintab():
+	elogin = request.form['elogin']
+	Lpw = request.form['Lpw']
+
+	user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
+	query_data = {'email' : elogin}
+	user = mysql.query_db(user_query, query_data)
+	if bcrypt.check_password_hash(user[0]['password'], Lpw):
+		print "successulf login"
+		return redirect('/login')
+
+	else:
+		flash("Please try again")
+		return	redirect('/')
+
+
 
 @app.route('/login')
 def login():
