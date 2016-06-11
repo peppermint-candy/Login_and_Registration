@@ -43,10 +43,11 @@
 		<p class="label" >Confirm Password:</p><input type="text" name="c_pw"><br><br>
 		<input style="margin-left: 308px;" type="submit" value="Register">
 		</form>
+		 <p>Alrady have an account, click<a href="{{ url_for('login') }}"> here to log in?</a>
 			{% with messages = get_flashed_messages() %}
 				{% if messages %}
 					{% for message in messages %}
-					<p>{{message}}</p>
+					<p style="color: red;">{{message}}</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}

@@ -87,7 +87,9 @@ def logintab():
 	query_data = {'email' : elogin}
 	user = mysql.query_db(user_query, query_data)
 	if bcrypt.check_password_hash(user[0]['password'], Lpw):
-		print "successulf login"
+		session['userIn'] = elogin
+		print session['userIn']
+		print "user is in"
 		return redirect('/login')
 
 	else:
