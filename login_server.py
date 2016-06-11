@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, flash
 # import the Connector function
+from flask.ext.bcrypt import Bcrypt
 from LnR_mysqlconnection import MySQLConnector
 import re
 import md5
@@ -9,7 +10,7 @@ mysql = MySQLConnector(app, 'assg_login_register')
 app.secret_key = "Secret"
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9\.\+_-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]+$')
 NAME = re.compile(r'[0,1,2,3,4,5,6,7,8,9]')
-
+bcrypt = Bcrypt(app)
 
 @app.route('/')
 def index():
@@ -56,12 +57,6 @@ def process():
 	else:
 		error = True
 
-	# email = request.form['email']
-	# pw = request.form['pw']
-	# encrypted_pw = md5.new(pw).hexdigest()
-	# first_name = request.form['first_name']
-	# last_name = request.form['last_name']
-
 	if error:
 		flash("Thanks for submitting your information!")
 		return create(request.form)
@@ -72,11 +67,13 @@ def process():
 # @app.route('/create')
 def create(data):
 
-	print data['first_name']
+	pw = data['pw']
+	print pw
+	pw_hash = bcrypt.generate_password_hash(pw)
 
 	insert_query = "INSERT INTO users (first_name, last_name, email, password, created_at, updated_at) VALUES (:first_name, :last_name, :email, :pw, NOW(), NOW())"
 
-	query_data = { 'first_name': data['first_name'], 'last_name': data['last_name'], 'email': data['email'], 'pw': data['pw'] }
+	query_data = { 'first_name': data['first_name'], 'last_name': data['last_name'], 'email': data['email'], 'pw': pw_hash }
 
 	mysql.query_db(insert_query, query_data)
 	return redirect('/login')
