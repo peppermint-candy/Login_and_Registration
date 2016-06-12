@@ -96,21 +96,20 @@ def logintab():
 		error = True
 	
 	if error:
-		print "user in verify"
+		print "user entering check input"
 		return check(request.form)
 	else:
 		flash("try again")
 		return redirect('/test')
 
 def check(data):
-	print "user in login page"
+	print "checking input with DB"
 	user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
 	query_data = {'email' : data['elogin']}
 	user = mysql.query_db(user_query, query_data)
 	if bcrypt.check_password_hash(user[0]['password'], data['Lpw']):
-		print query_data
-		print "user is in"
-		return redirect('/login')
+		print "user is logged in"
+		return render_template('logged_in.html')
 	else:
 		flash("Wrong password, please try again")
 		return	redirect('/test')
