@@ -58,7 +58,6 @@ def process():
 		error = True
 
 	if error:
-		flash("Thanks for submitting your information!")
 		return create(request.form)
 	else:
 		flash("please validate your input")
@@ -104,11 +103,12 @@ def logintab():
 		return redirect('/test')
 
 def check(data):
-	print "user were in check"
+	print "user in login page"
 	user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
 	query_data = {'email' : data['elogin']}
 	user = mysql.query_db(user_query, query_data)
 	if bcrypt.check_password_hash(user[0]['password'], data['Lpw']):
+		print query_data
 		print "user is in"
 		return redirect('/login')
 	else:
@@ -117,12 +117,12 @@ def check(data):
 
 @app.route('/test')
 def test():
-	print "you were in test"
+	print "user entering login page"
 	return render_template('login_page.html')
 
 @app.route('/login')
 def login():
-	print "Hello"
-	return redirect('/')
+	print "user successfully registered"
+	return redirect('/test')
 app.run(debug=True)
 
